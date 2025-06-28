@@ -1,54 +1,25 @@
-<h1 align="center">📘 Student Management System (Django)</h1> <p align="center"> A <strong>Mini Project</strong> built using Django to manage students and courses — with elegant admin authentication, CRUD operations, search, pagination, and a clean dashboard interface. </p>
-🚀 Features
-🔐 Admin Authentication
-✅ Built-in Django Admin Panel for backend management
+# 📘 Student Management System (Django)
 
-🎨 Custom Login Page created specifically to fulfill assignment requirements
+A **mini project** built with Django to efficiently manage **students** and **courses**, featuring secure admin authentication, full CRUD operations, powerful search & pagination, and a sleek dashboard UI.
 
-📘 Course Management
-➕ Add New Courses
+---
 
-📝 Edit Existing Courses
+## 🚀 Key Features
 
-🗑️ Delete Courses
+### 🔐 Admin Authentication  
+Built-in Django Admin + Custom Login Screen for secure access
 
-📋 View All Courses
+### 📚 Course Management  
+- ➕ Add | ✏️ Edit | 🗑️ Delete | 📋 View all courses  
+- 🔎 Search & 📄 Pagination for smooth navigation
 
-🔍 Includes Search and Pagination for easy navigation
+### 👩‍🎓 Student Management  
+- ➕ Add | ✏️ Edit | 🗑️ Delete | 📋 View all students  
+- 🎯 Assign each student to a single course  
+- 🔎 Search & 📄 Pagination for quick filtering
 
-👨‍🎓 Student Management
-➕ Add New Students with:
+### 🏠 User-Friendly Dashboard  
+One place to add/view courses & students immediately after login
 
-Name
-
-Age
-
-Email
-
-Assigned Course (one course per student)
-
-📝 Edit or Update Student Info
-
-🗑️ Delete Students
-
-📋 View Full Student List
-
-🔍 Includes Search and Pagination for quick access
-
-🏠 Dashboard
-After successful login, the admin lands on a user-friendly dashboard with the following key options:
-
-➕ Add Course
-
-📋 View Courses
-
-➕ Add Student
-
-📋 View Students
-
-All in one place, beautifully organized and easy to access ✅
-
-🔍 Search & Pagination
-🔎 Instantly filter students and courses using built-in search
-
-📄 Paginate large lists for a smoother and cleaner browsing experience
+### 🔍 Efficient Search & Pagination  
+Instantly filter records and browse large lists with ease
