@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% block title %}View Courses - Student Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">
+                <i class="bi bi-book-fill me-2"></i>All Courses
+            </h1>
+            <a href="{% url 'add_course' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i>Add New Course
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control" name="search" 
+                                   placeholder="Search courses by name or description..." 
+                                   value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-outline-primary flex-fill">
+                                <i class="bi bi-search me-1"></i>Search
+                            </button>
+                            <a href="{% url 'view_courses' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Summary -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span class="text-muted">
+                    Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ total_courses }} course{{ total_courses|pluralize }}
+                    {% if search_query %}
+                        for "<strong>{{ search_query }}</strong>"
+                    {% endif %}
+                </span>
+            </div>
+            {% if search_query %}
+            <a href="{% url 'view_courses' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-x-circle me-1"></i>Clear Search
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Courses Table -->
+{% if page_obj %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Course Name</th>
+                                <th>Duration</th>
+                                <th>Students Enrolled</th>
+                                <th>Created Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in page_obj %}
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>{{ course.name }}</strong>
+                                        {% if course.description %}
+                                            <br><small class="text-muted">{{ course.description|truncatewords:10 }}</small>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ course.duration }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ course.get_student_count }} student{{ course.get_student_count|pluralize }}</span>
+                                </td>
+                                <td>{{ course.created_at|date:"M d, Y" }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'update_course' course.id %}" 
+                                           class="btn btn-sm btn-outline-primary" 
+                                           title="Edit Course">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal{{ course.id }}"
+                                                title="Delete Course">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteModal{{ course.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">
+                                                <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                                                Confirm Delete
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete the course <strong>"{{ course.name }}"</strong>?</p>
+                                            {% if course.get_student_count > 0 %}
+                                                <div class="alert alert-warning">
+                                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                                    <strong>Warning:</strong> This course has {{ course.get_student_count }} enrolled student{{ course.get_student_count|pluralize }}. 
+                                                    Deleting this course will also remove all student enrollments.
+                                                </div>
+                                            {% endif %}
+                                            <p class="text-muted mb-0">This action cannot be undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <a href="{% url 'delete_course' course.id %}" class="btn btn-danger">
+                                                <i class="bi bi-trash me-1"></i>Delete Course
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="row mt-4">
+    <div class="col-12">
+        <nav aria-label="Courses pagination">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<!-- No Courses Found -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                {% if search_query %}
+                    <i class="bi bi-search" style="font-size: 4rem; color: #dee2e6;"></i>
+                    <h5 class="mt-3 text-muted">No courses found for "{{ search_query }}"</h5>
+                    <p class="text-muted">Try adjusting your search terms or browse all courses.</p>
+                    <a href="{% url 'view_courses' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left me-1"></i>View All Courses
+                    </a>
+                {% else %}
+                    <i class="bi bi-book" style="font-size: 4rem; color: #dee2e6;"></i>
+                    <h5 class="mt-3 text-muted">No Courses Available</h5>
+                    <p class="text-muted">Start by adding your first course to the system.</p>
+                    <a href="{% url 'add_course' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i>Add First Course
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

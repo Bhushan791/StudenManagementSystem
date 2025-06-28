@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Student Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">
+                <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+            </h1>
+            <div class="text-muted">
+                Welcome back, <strong>{{ user.username }}</strong>!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title mb-0">{{ total_courses }}</h4>
+                        <p class="card-text">Total Courses</p>
+                    </div>
+                    <i class="bi bi-book-fill" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-primary border-0">
+                <a href="{% url 'view_courses' %}" class="text-white text-decoration-none">
+                    <small>View all courses <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title mb-0">{{ total_students }}</h4>
+                        <p class="card-text">Total Students</p>
+                    </div>
+                    <i class="bi bi-people-fill" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-success border-0">
+                <a href="{% url 'view_students' %}" class="text-white text-decoration-none">
+                    <small>View all students <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title mb-0">Quick</h4>
+                        <p class="card-text">Add Course</p>
+                    </div>
+                    <i class="bi bi-plus-circle-fill" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-info border-0">
+                <a href="{% url 'add_course' %}" class="text-white text-decoration-none">
+                    <small>Add new course <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title mb-0">Quick</h4>
+                        <p class="card-text">Add Student</p>
+                    </div>
+                    <i class="bi bi-person-plus-fill" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-warning border-0">
+                <a href="{% url 'add_student' %}" class="text-white text-decoration-none">
+                    <small>Add new student <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-lightning-fill me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-lg-3 mb-2">
+                        <a href="{% url 'view_courses' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-list-ul me-2"></i>View Courses
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-2">
+                        <a href="{% url 'add_course' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Add Course
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-2">
+                        <a href="{% url 'view_students' %}" class="btn btn-outline-success w-100">
+                            <i class="bi bi-list-ul me-2"></i>View Students
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-2">
+                        <a href="{% url 'add_student' %}" class="btn btn-outline-success w-100">
+                            <i class="bi bi-person-plus me-2"></i>Add Student
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Students -->
+{% if recent_students %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-clock-history me-2"></i>Recently Enrolled Students
+                </h5>
+                <a href="{% url 'view_students' %}" class="btn btn-sm btn-outline-primary">
+                    View All <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th>Enrolled Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in recent_students %}
+                            <tr>
+                                <td>
+                                    <i class="bi bi-person-circle me-2"></i>{{ student.name }}
+                                </td>
+                                <td>{{ student.email }}</td>
+                                <td>
+                                    <span class="badge bg-primary">{{ student.course.name }}</span>
+                                </td>
+                                <td>{{ student.enrollment_date|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-people" style="font-size: 4rem; color: #dee2e6;"></i>
+                <h5 class="mt-3 text-muted">No Students Enrolled Yet</h5>
+                <p class="text-muted">Start by adding some courses and then enroll students.</p>
+                <a href="{% url 'add_course' %}" class="btn btn-primary me-2">
+                    <i class="bi bi-plus-circle me-1"></i>Add Course
+                </a>
+                <a href="{% url 'add_student' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-person-plus me-1"></i>Add Student
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
